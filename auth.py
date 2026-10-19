@@ -11,6 +11,7 @@ import unicodedata
 import requests
 from argon2 import PasswordHasher
 from argon2.exceptions import VerificationError, InvalidHashError
+from dotenv import load_dotenv
 from zxcvbn import zxcvbn
 
 SERVICE_NAME = "htwg-demo"
@@ -21,7 +22,8 @@ MAX_FAILED_ATTEMPTS = 100  # §3.2.2: no more than 100 consecutive failures per 
 # Argon2id with RFC 9106 low-memory profile (m=64 MiB, t=3, p=4, 16-byte random salt),
 # above the OWASP minimum (m=19 MiB, t=2, p=1).
 ph = PasswordHasher()
-# Secret pepper kept outside the database (env var / secrets manager / HSM).
+# Secret pepper kept outside the database (env var / .env / secrets manager / HSM).
+load_dotenv()  # real environment variables take precedence over .env
 PEPPER = os.environ.get("PASSWORD_PEPPER", "").encode()
 if len(PEPPER) < 32:
     raise RuntimeError("Set PASSWORD_PEPPER to a random secret of at least 32 bytes")

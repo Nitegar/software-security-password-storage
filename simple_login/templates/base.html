@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Simple Login{% endblock %}</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { margin: 0; min-height: 100vh; background: #f3f5f9; color: #182230; font: 16px/1.5 system-ui, sans-serif; display: grid; place-items: center; padding: 24px; }
+    .card { width: min(100%, 420px); padding: 36px; border-radius: 16px; background: white; box-shadow: 0 12px 40px #18223012; }
+    h1 { margin: 0 0 8px; font-size: 28px; }
+    .muted { color: #667085; margin: 0 0 24px; }
+    label { display: block; margin: 16px 0 6px; font-weight: 600; }
+    input { width: 100%; padding: 11px 12px; border: 1px solid #d0d5dd; border-radius: 8px; font: inherit; }
+    button { display: block; width: 100%; margin-top: 20px; padding: 12px; border: 0; border-radius: 8px; background: #3157d5; color: white; font: inherit; font-weight: 700; cursor: pointer; }
+    .link { color: #3157d5; text-decoration: none; font-weight: 600; }
+    .foot { margin: 20px 0 0; text-align: center; color: #667085; }
+    .errorlist { color: #b42318; padding-left: 20px; }
+    .helptext { display: block; margin-top: 5px; color: #667085; font-size: 13px; }
+    .helptext ul { margin: 4px 0; padding-left: 18px; }
+  </style>
+</head>
+<body><main class="card">{% block content %}{% endblock %}</main></body>
+</html>

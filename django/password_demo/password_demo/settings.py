@@ -86,6 +86,7 @@ PASSWORD_HASHERS = [
 # Password validation
 
 AUTH_PASSWORD_VALIDATORS = [
+    #similarity valitador
     {
         "NAME": (
             "django.contrib.auth.password_validation."
@@ -99,6 +100,7 @@ AUTH_PASSWORD_VALIDATORS = [
         ),
         "OPTIONS": {"min_length": 15},
     },
+    #common password 
     {
         "NAME": (
             "django.contrib.auth.password_validation."

@@ -29,7 +29,7 @@ def register(request):
         return page(request, "Username already exists.", 400, True)
 
     try:
-        validate_password(password)
+        validate_password(password, user=User(username=username))
     except ValidationError as error:
         return page(request, "; ".join(error.messages), 400, True)
 

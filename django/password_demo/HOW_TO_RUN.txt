@@ -1,0 +1,105 @@
+PASSWORD STORAGE DEMO (Django + Argon2)
+=======================================
+
+A small Django app that registers users, logs them in and out, and stores
+their passwords safely as Argon2 hashes (never as plain text).
+
+
+1. SETUP (only the first time)
+------------------------------
+You need Python 3 installed. Open a terminal (CMD) in this folder
+(django\password_demo) and run:
+
+    python -m venv .venv
+    .venv\Scripts\python.exe -m pip install -r requirements.txt
+    .venv\Scripts\python.exe manage.py migrate
+
+(On macOS/Linux use .venv/bin/python instead of .venv\Scripts\python.exe)
+
+
+2. START THE SERVER
+-------------------
+    .venv\Scripts\python.exe manage.py runserver
+
+Then open this address in your browser:
+
+    http://127.0.0.1:8000/auth/register/
+
+To stop the server press Ctrl + C in the terminal.
+
+
+3. WHAT TO TRY IN THE BROWSER
+-----------------------------
+The page has three forms: Register, Log in and Log out.
+
+  - Register with a short password (e.g. "hello123")
+      -> error: the password must have at least 15 characters
+
+  - Register with a password of 15+ characters
+      -> "User registered successfully!" and the hash stored in the database
+
+  - Register the same username again
+      -> "Username already exists."
+
+  - Log in with the right password
+      -> "Welcome, <username>!" and "Current user" shows your name
+
+  - Log in with a wrong password
+      -> "Invalid username or password."
+
+  - Log out
+      -> "Logged out successfully."
+
+
+4. HOW IT WORKS
+---------------
+  - Registration: validate_password() checks the password rules
+    (minimum 15 characters, set in settings.py). Then create_user()
+    hashes the password with Argon2 and saves only the hash.
+
+  - Login: authenticate() hashes the password you type with the same salt
+    and parameters, and compares it with the stored hash. If they match,
+    login() creates a session (a cookie in your browser).
+
+  - Logout: logout() deletes the session.
+
+  - The error message on login is the same for "unknown user" and
+    "wrong password", so an attacker cannot find out which usernames exist.
+
+  - The forms include a CSRF token, which Django requires for POST requests.
+
+
+5. READING THE HASH
+-------------------
+After registering, the page shows something like:
+
+    argon2$argon2id$v=19$m=102400,t=2,p=8$<salt>$<hash>
+
+  argon2id   the algorithm (memory-hard, resistant to GPU attacks)
+  m=102400   memory cost in KiB (about 100 MB per hash)
+  t=2        number of iterations
+  p=8        parallelism (threads)
+  <salt>     random value, different for every user
+  <hash>     the result
+
+Because of the random salt, two users with the SAME password get
+DIFFERENT hashes. Try it!
+
+(Showing the hash on the page is only for this demo. A real app never
+does this.)
+
+
+6. RUN THE TESTS
+----------------
+    .venv\Scripts\python.exe manage.py test accounts -v 2
+
+All 5 tests should end with "ok".
+
+
+7. IMPORTANT FILES
+------------------
+  password_demo\settings.py   PASSWORD_HASHERS (Argon2) and the 15-char rule
+  accounts\views.py           register, login and logout logic
+  accounts\urls.py            URLs: /auth/register/, /auth/login/, /auth/logout/
+  accounts\templates\accounts\home.html   the page with the forms
+  accounts\tests.py           automated tests

@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Password demo</title>
+  <style>
+    body { font-family: sans-serif; max-width: 640px; margin: 2rem auto; padding: 0 1rem; }
+    form { border: 1px solid #ccc; padding: 1rem; margin-bottom: 1rem; border-radius: 6px; }
+    input { display: block; margin: .3rem 0 .6rem; padding: .4rem; width: 100%; box-sizing: border-box; }
+    .msg { padding: .8rem; border-radius: 6px; background: #eef; word-break: break-all; }
+    .error { background: #fee; }
+  </style>
+</head>
+<body>
+  <h1>Password demo</h1>
+  <p>Current user: <strong>{{ user.username|default:"(none)" }}</strong></p>
+
+  {% if message %}
+    <p class="msg {% if error %}error{% endif %}">{{ message }}</p>
+  {% endif %}
+  {% if stored_hash %}
+    <p class="msg">Hash stored in the database:<br><code>{{ stored_hash }}</code></p>
+  {% endif %}
+
+  <form method="post" action="/auth/register/">
+    {% csrf_token %}
+    <h2>Register</h2>
+    <label>Username <input name="username"></label>
+    <label>Password (at least 15 characters) <input name="password" type="password"></label>
+    <button>Register</button>
+  </form>
+
+  <form method="post" action="/auth/login/">
+    {% csrf_token %}
+    <h2>Log in</h2>
+    <label>Username <input name="username"></label>
+    <label>Password <input name="password" type="password"></label>
+    <button>Log in</button>
+  </form>
+
+  <form method="post" action="/auth/logout/">
+    {% csrf_token %}
+    <h2>Log out</h2>
+    <button>Log out</button>
+  </form>
+</body>
+</html>

@@ -1,0 +1,4 @@
+argon2-cffi>=25.1
+zxcvbn>=4.5
+requests>=2.32
+python-dotenv>=1.0
